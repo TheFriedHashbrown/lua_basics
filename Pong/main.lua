@@ -45,10 +45,10 @@ function love.keypressed(key)
             --start the ball by putting it back into the middle position
             ballx = virtual_width/2 - 2
             bally = virtual_height/2 - 2
-            
+
             --randomizing the ball's initial velocity again
             balldx = math.random(2) == 1 and 100 or -100
-            balldy = math.random(-50, 50)
+            balldy = math.random(-75, 75)
         end
     end
 end
