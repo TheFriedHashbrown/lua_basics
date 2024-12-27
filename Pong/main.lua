@@ -25,6 +25,7 @@ function love.load()
     })
     _G.player1score = 0
     _G.player2score = 0
+    _G.servingPlayer = 1
 
     _G.player1 = Paddle(10, 30, 5, 20, virtual_width, virtual_height)
     _G.player2 = Paddle(virtual_width - 10, virtual_height - 30, 5, 20, virtual_width, virtual_height)
@@ -51,9 +52,16 @@ end
 
 
 function love.update(dt)
-    if gameState == 'play' then
+    if gameState == 'serve' then
+        ball.dy = math.random(-50, 50)
+        if servingPlayer== 1 then
+            ball.dx = math.random (140,200)
+        else 
+            ball.dx = -math.random(140, 200)
+        end
+    elseif gameState == 'play' then
         if ball:collides(player1) then
-            ball.dx = -ball.dx * 1.08
+            ball.dx = -ball.dx * 1.1
             ball.x = player1.x + player1.width --change this to width to see the difference
 
             if ball.dy < 0 then
@@ -64,7 +72,7 @@ function love.update(dt)
         end
 
         if ball:collides(player2) then
-            ball.dx = -ball.dx * 1.08
+            ball.dx = -ball.dx * 1.1
             ball.x = player2.x - ball.width --change this to width to see the difference
 
             if ball.dy < 0 then
@@ -86,6 +94,21 @@ function love.update(dt)
         ball:update(dt)
     end
 
+    if ball.x < 0 then
+        servingPlayer = 1
+        player2score = player2score + 1
+        ball:reset()
+        gameState = 'serve'
+    end
+
+    if ball.x > virtual_width then
+        servingPlayer = 2
+        player1score = player1score + 1
+        ball:reset()
+        gameState = 'serve'
+    end
+
+    --player1 movement
     if love.keyboard.isDown('w') then
         player1.dy = -paddle_speed
     elseif love.keyboard.isDown('s') then
