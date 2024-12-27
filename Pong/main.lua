@@ -26,6 +26,7 @@ function love.load()
     _G.player1score = 0
     _G.player2score = 0
     _G.servingPlayer = 1
+    _G.winningPlayer = 1
 
     _G.player1 = Paddle(10, 30, 5, 20, virtual_width, virtual_height)
     _G.player2 = Paddle(virtual_width - 10, virtual_height - 30, 5, 20, virtual_width, virtual_height)
@@ -41,11 +42,9 @@ function love.keypressed(key)
     elseif key == "enter" or key == "return" then
         --the enter key starts or stops the game 
         if gameState == "start" then
+            gameState = "serve"
+        elseif gameState == "serve" then
             gameState = "play"
-        else 
-            gameState = "start"
-
-            ball:reset()
         end
     end
 end
@@ -61,7 +60,7 @@ function love.update(dt)
         end
     elseif gameState == 'play' then
         if ball:collides(player1) then
-            ball.dx = -ball.dx * 1.1
+            ball.dx = -ball.dx * 20
             ball.x = player1.x + player1.width --change this to width to see the difference
 
             if ball.dy < 0 then
@@ -70,6 +69,7 @@ function love.update(dt)
                 ball.dy = math.random(10, 150)
             end
         end
+    
 
         if ball:collides(player2) then
             ball.dx = -ball.dx * 1.1
@@ -97,15 +97,17 @@ function love.update(dt)
     if ball.x < 0 then
         servingPlayer = 1
         player2score = player2score + 1
-        ball:reset()
+
         gameState = 'serve'
+        ball:reset()
     end
 
     if ball.x > virtual_width then
         servingPlayer = 2
         player1score = player1score + 1
-        ball:reset()
+    
         gameState = 'serve'
+        ball:reset()
     end
 
     --player1 movement
@@ -151,13 +153,13 @@ function love.draw()
     player2:render()
  
     ball:render()
-    displayFPS()
+    -- displayFPS()
 
     push:apply('end')
 end
 
-function displayFPS()
-    love.graphics.setFont(score_font)
-    love.graphics.setColor(0, 255, 0, 255)
-    love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
-end
+-- function displayFPS()
+--     love.graphics.setFont(score_font)
+--     love.graphics.setColor(0, 255, 0, 255)
+--     love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
+-- end
