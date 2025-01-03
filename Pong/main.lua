@@ -60,7 +60,7 @@ function love.update(dt)
         end
     elseif gameState == 'play' then
         if ball:collides(player1) then
-            ball.dx = -ball.dx * 20
+            ball.dx = -ball.dx * 1.1
             ball.x = player1.x + player1.width --change this to width to see the difference
 
             if ball.dy < 0 then
