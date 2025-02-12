@@ -18,6 +18,13 @@ function love.load()
 
     math.randomseed(os.time())
 
+    _G.sounds = {
+        ['paddle_hit'] = love.audio.newSource('Audio/paddle_hit.wav', 'static'),
+        ['point'] = love.audio.newSource('Audio/Point.wav', 'static'),
+        ['wall_hit'] = love.audio.newSource('Audio/wall_collide.wav', 'static')
+    }
+
+
     push:setupScreen(virtual_width, virtual_height, window_width, window_height, {
         fullscreen = false,
         resizable = false,
@@ -68,6 +75,8 @@ function love.update(dt)
             else
                 ball.dy = math.random(10, 150)
             end
+
+            sounds['paddle_hit']:play()
         end
     
 
@@ -80,16 +89,20 @@ function love.update(dt)
             else
                 ball.dy = math.random(10, 150)
             end
+
+            sounds['paddle_hit']:play()
         end
 
         if ball.y <= 0 then
             ball.y = 0
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         end
 
         if ball.y >= virtual_height - ball.height then
             ball.y = virtual_height - ball.height
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         end
         ball:update(dt)
     end
@@ -98,6 +111,8 @@ function love.update(dt)
         servingPlayer = 1
         player2score = player2score + 1
 
+        sounds['point']:play()
+        
         gameState = 'serve'
         ball:reset()
     end
@@ -105,6 +120,8 @@ function love.update(dt)
     if ball.x > virtual_width then
         servingPlayer = 2
         player1score = player1score + 1
+
+        sounds['point']:play()
     
         gameState = 'serve'
         ball:reset()
