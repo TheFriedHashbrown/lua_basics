@@ -6,9 +6,20 @@ function Bird:init(virtual_width, virtual_height)
     self.height = self.image:getHeight()
     self.virtual_width = virtual_width
     self.virtual_height = virtual_height
+    self.dy = 0
 
     self.x = (virtual_width /2) - (self.width/2)
     self.y = (virtual_height /2) - (self.height/2)
+end
+
+function Bird:update(dt)
+    self.dy = self.dy + GRAVITY * dt
+
+    if love.keyboard.wasPressed('space') then
+        self.dy = -5
+    end
+
+    self.y = self.y + self.dy
 end
 
 function Bird:render()

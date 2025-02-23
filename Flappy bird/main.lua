@@ -1,6 +1,8 @@
 Class = require('class')
 require 'Bird'
 
+_G.GRAVITY = 20
+
 _G.love = require ('love')
 _G.push = require ('push')
 
@@ -28,6 +30,8 @@ function love.load()
         resizable = true,
         vsync = true
     })
+
+    love.keyboard.keysPressed = {}
 end
 
 function love.resize(w, h)
@@ -35,9 +39,20 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key)
+    love.keyboard.keysPressed[key] = true
+
     if key == 'escape' then
         love.event.quit()
     end
+end
+
+function love.keyboard.wasPressed(key)
+    if love.keyboard.keysPressed[key] then
+        return true
+    else
+        return false
+    end
+    
 end
 
 function love.update(dt)
@@ -46,6 +61,9 @@ function love.update(dt)
 
     groundscroll = (groundscroll + GROUND_SCROLL_SPEED * dt)
         % virtual_width    
+
+    bird:update(dt)
+    love.keyboard.keysPressed = {}
 end
 
 function love.draw()
