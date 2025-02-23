@@ -1,9 +1,22 @@
+Class = require('class')
+require 'Bird'
+
 _G.love = require ('love')
 _G.push = require ('push')
 
 local window_width, window_height, virtual_width, virtual_height = 1280, 720, 512, 288
+
 local background = love.graphics.newImage("Assets/Images/background.png")
+local backgroundscroll = 0
+local BACKGROUND_SCROLL_SPEED = 30
+local BACKGROUND_LOOPING_POINT = 433
+
 local ground = love.graphics.newImage("Assets/Images/ground.png")
+local groundscroll = 0
+local GROUND_SCROLL_SPEED = 60
+
+
+local bird = Bird(virtual_width, virtual_height)
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -28,12 +41,19 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    
+    backgroundscroll = (backgroundscroll + BACKGROUND_SCROLL_SPEED * dt) 
+        % BACKGROUND_LOOPING_POINT
+
+    groundscroll = (groundscroll + GROUND_SCROLL_SPEED * dt)
+        % virtual_width    
 end
 
 function love.draw()
     push:start()
-    love.graphics.draw(background, 0, 0)
-    love.graphics.draw(ground, 0, virtual_height - 16)
+    
+    love.graphics.draw(background, -backgroundscroll, 0)
+    love.graphics.draw(ground, -groundscroll, virtual_height - 16)
+    bird:render()
+
     push:finish()
 end
