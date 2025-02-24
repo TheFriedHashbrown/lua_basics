@@ -1,12 +1,13 @@
 Class = require('class')
 require 'Bird'
+require 'Pipe'
 
 _G.GRAVITY = 20
 
 _G.love = require ('love')
 _G.push = require ('push')
 
-local window_width, window_height, virtual_width, virtual_height = 1280, 720, 512, 288
+_G.window_width, _G.window_height, _G.virtual_width, _G.virtual_height = 1280, 720, 512, 288
 
 local background = love.graphics.newImage("Assets/Images/background.png")
 local backgroundscroll = 0
@@ -18,11 +19,14 @@ local groundscroll = 0
 local GROUND_SCROLL_SPEED = 60
 
 
-local bird = Bird(virtual_width, virtual_height)
+local bird = Bird()
+local pipes = {}
+local spawnTimer = 0
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    
+    math.randomseed(os.time())
+
     love.window.setTitle("Flappy Bird")
     
     push:setupScreen(virtual_width, virtual_height, window_width, window_height, {
@@ -61,8 +65,24 @@ function love.update(dt)
 
     groundscroll = (groundscroll + GROUND_SCROLL_SPEED * dt)
         % virtual_width    
+    
+    spawnTimer = spawnTimer + dt
+
+    if spawnTimer > 2 then
+        table.insert(pipes, Pipe())
+        spawnTimer = 0
+    end
 
     bird:update(dt)
+    
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+    
+        if pipe.x < -pipe.width then
+            table.remove(pipes, k)
+        end
+    end
+
     love.keyboard.keysPressed = {}
 end
 
@@ -70,6 +90,11 @@ function love.draw()
     push:start()
     
     love.graphics.draw(background, -backgroundscroll, 0)
+    
+    for k, pipe in pairs(pipes) do
+        pipe:render()
+    end
+    
     love.graphics.draw(ground, -groundscroll, virtual_height - 16)
     bird:render()
 
