@@ -1,16 +1,21 @@
 PipePair = Class{}
 
+-- size of the gap between pipes
 local GAP_HEIGHT = 90
 
 function PipePair:init(y)
-    self.x = virtual_width + 32
+    -- initialize pipes past the end of the screen
+    self.x = VIRTUAL_WIDTH + 32
+
+    -- y value is for the topmost pipe; gap is a vertical shift of the second lower pipe
     self.y = y
 
+    -- instantiate two pipes that belong to this pair
     self.pipes = {
         ['upper'] = Pipe('top', self.y),
         ['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + GAP_HEIGHT)
     }
-    
+
     self.remove = false
 end
 
@@ -20,7 +25,7 @@ function PipePair:update(dt)
         self.pipes['lower'].x = self.x
         self.pipes['upper'].x = self.x
     else
-        self.remove  = true
+        self.remove = true
     end
 end
 
