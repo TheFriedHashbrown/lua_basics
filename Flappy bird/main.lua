@@ -4,7 +4,6 @@ Class = require 'class'
 require 'Bird'
 require 'Pipe'
 require 'PipePair'
-
 require 'StateMachine'
 require 'states.BaseState'
 require 'states.CountdownState'
@@ -12,15 +11,11 @@ require 'states.PlayState'
 require 'states.ScoreState'
 require 'states.TitleScreenState'
 
--- physical screen dimensions
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-
--- virtual resolution dimensions
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
--- background image and starting scroll location (X axis)
 local background = love.graphics.newImage('Assets/Images/background.png')
 local backgroundScroll = 0
 
@@ -84,15 +79,12 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    -- update background and ground scroll offsets
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % 
         BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % GROUND_LOOPING_POINT
 
-    -- now, we just update the state machine, which defers to the right state
     gStateMachine:update(dt)
 
-    -- reset input table
     love.keyboard.keysPressed = {}
 end
 
