@@ -1,10 +1,7 @@
 Pipe = Class{}
 
 local PIPE_IMAGE = love.graphics.newImage("Assets/Images/Pipe.png")
-_G.PIPE_SPEED = 60
 
-_G.PIPE_HEIGHT = 288
-_G.PIPE_WIDTH = 70
 
 function Pipe:init(orientation, y)
     self.x = virtual_width
