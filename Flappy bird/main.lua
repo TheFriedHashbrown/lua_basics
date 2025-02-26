@@ -62,7 +62,6 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key)
-    -- add to our table of keys pressed this frame
     love.keyboard.keysPressed[key] = true
     
     if key == 'escape' then
