@@ -11,10 +11,10 @@ require 'states.PlayState'
 require 'states.ScoreState'
 require 'states.TitleScreenState'
 
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
-VIRTUAL_WIDTH = 512
-VIRTUAL_HEIGHT = 288
+_G.window_width = 1280
+_G.window_height = 720
+_G.virtual_width = 512
+_G.virtual_height = 288
 
 local background = love.graphics.newImage('Assets/Images/background.png')
 local backgroundScroll = 0
@@ -40,11 +40,17 @@ function love.load()
     hugeFont = love.graphics.newFont(56)
     love.graphics.setFont(flappyFont)
 
-    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
+    push:setupScreen(virtual_width, virtual_height, window_width, window_height, {
         vsync = true,
         fullscreen = false,
         resizable = true
     })
+
+    sounds = {
+        ['jump'] = love.audio.newSource("Assets/Audio/Flap.wav", 'static'),
+        ['hurt'] = love.audio.newSource("Assets/Audio/Hurt.wav", 'static'),
+        ['score'] = love.audio.newSource("Assets/Audio/score.wav", 'static')
+    }
 
     gStateMachine = StateMachine {
         ['title'] = function() return TitleScreenState() end,
@@ -92,7 +98,7 @@ function love.draw()
 
     love.graphics.draw(background, -backgroundScroll, 0)
     gStateMachine:render()
-    love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
+    love.graphics.draw(ground, -groundScroll, virtual_height - 16)
     
     push:finish()
 end
