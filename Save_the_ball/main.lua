@@ -1,17 +1,22 @@
 love = require("love")
 push = require 'push'
+Class = require 'class'
+require 'Player'
 
 function love.load()
     love.window.setTitle("Save the ball")
-    push:setupScreen(800, 600, 1280, 720, {
-        fullscreen = true,
-        resizable = false,
-        vsync = true
-    })
+
+    -- push:setupScreen(800, 600, 1280, 720, {
+    --     fullscreen = true,
+    --     resizable = false,
+    --     vsync = true
+    -- })
+
+    player = Player(30, 30, 20)
 end
 
 function love.update(dt)
-
+    player:movement()
 end
 
 function love.keypressed(key)
@@ -21,7 +26,7 @@ function love.keypressed(key)
 end
 
 function love.draw()
-    push:start()
-
-    push:finish()
+    -- push:start()
+    player:render()
+    -- push:finish()
 end
