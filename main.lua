@@ -24,17 +24,23 @@ function love.update(dt)
     end
 
     if love.keyboard.isDown("a") then
-        pacman.x = pacman.x - 1
+        pacman.x = pacman.x - 4
     elseif love.keyboard.isDown("d") then
-        pacman.x = pacman.x + 1    
+        pacman.x = pacman.x + 4
     elseif love.keyboard.isDown("w") then
-        pacman.y = pacman.y - 1    
+        pacman.y = pacman.y - 4
     elseif love.keyboard.isDown("s") then
-        pacman.y = pacman.y + 1        
+        pacman.y = pacman.y + 4
     end
 
     if pacman.x >= food.x + 15 then
         food.eaten = true
+    end
+end
+
+function love.keypressed(key)
+    if key == 'escape' then
+        love.event.quit()
     end
 end
 
