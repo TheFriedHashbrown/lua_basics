@@ -1,5 +1,6 @@
 push = require 'push'
 Class = require 'class'
+love = require("love")
 
 require 'Bird'
 require 'Pipe'
@@ -99,6 +100,6 @@ function love.draw()
     love.graphics.draw(background, -backgroundScroll, 0)
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, virtual_height - 16)
-    
+
     push:finish()
 end
